@@ -158,7 +158,20 @@
                                         (find-file (tabulated-list-get-id)))) 
       (switch-to-buffer "*Agile Sprints*"))))
 
+(defun append-to-org-todo-keywords (keywords)
+  "Append KEYWORDS to the first sequence in `org-todo-keywords`."
+  (let ((sequence (car org-todo-keywords)))
+    (setq org-todo-keywords
+          (cons (append sequence keywords) (cdr org-todo-keywords)))))
 
+(append-to-org-todo-keywords '("INPROGRESS" "INREVIEW"))
+
+(defun agile-open-current-sprint ()
+  "Open the org file of the current active sprint."
+  (interactive)
+  (let ((sprint (agile-get-current-sprint)))
+    (when sprint
+      (find-file (plist-get sprint :file)))))
 
 (provide 'agile)
 ;;; agile.el ends here
